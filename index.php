@@ -8,13 +8,13 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$telegramBotToken =  \Illuminate\Support\Arr::get(env('TELEGRAM_BOT_TOKEN'), null);;
+$telegramBotToken = env('TELEGRAM_BOT_TOKEN');
 
 if (!$telegramBotToken) {
     throw new Exception('TELEGRAM_BOT_TOKEN environment variable not set -'.__DIR__);
 }
 
-
+// \Illuminate\Support\Arr::get(env('TELEGRAM_BOT_TOKEN'), null);
 
 $telegram = new Api($telegramBotToken);
     $result = $telegram->getWebhookUpdates();
