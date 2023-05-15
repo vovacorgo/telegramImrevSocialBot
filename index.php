@@ -39,14 +39,28 @@ $update = $telegram->commandsHandler(true);
 if($update->getMessage()->has('text'))
 {   $text = $update->getMessage()->getText();
     switch ($text){
-        case 'Старт':
-            $message = "Вітаю";
+        case '/start':
+            $keyboard = [];
+            break;
+        case 'Правові консультації':
+            $message = "Правові консультації?";
             $keyboard = $base_keyboard;
             break;
         case 'Пільгові питання':
             $message = "Пільгові питання?";
             $keyboard = $base_keyboard;
-
+            break;
+        case 'Реабілітація':
+            $message = "Реабілітація?";
+            $keyboard = $base_keyboard;
+            break;
+        case 'Консультації з фахівцями':
+            $message = "Консультації з фахівцями?";
+            $keyboard = $base_keyboard;
+            break;
+        case 'Запит на зворотній зв’язок':
+            $message = "Запит на зворотній зв’язок?";
+            $keyboard = $base_keyboard;
             break;
         default:
             $message = "Хибна команда";
@@ -58,11 +72,16 @@ if($update->getMessage()->has('text'))
         'resize_keyboard' => true,
         'one_time_keyboard' => true
     ]);
-    $response = $telegram->sendMessage([
+    $response_data = [
         'chat_id' => $chat_id,
-        'text' => $message,
         'reply_markup' => $reply_markup
-    ]);
+    ];
+
+    if (isset($message)) {
+        $response_data['text'] = $message;
+    }
+
+    $response = $telegram->sendMessage($response_data);
 
 }
 
