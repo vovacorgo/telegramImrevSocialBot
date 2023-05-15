@@ -25,21 +25,10 @@ $first_name = $result["message"]["from"]["first_name"];
 $last_name = $result["message"]["from"]["last_name"];
 $username = $first_name . ' ' . $last_name;
 
-$keyboard = [
-    ['New',],
+$base_keyboard = [
+    ['Правові консультації', 'Пільгові питання', 'Реабілітація'],
+    ['Соціальні обласні програми','Консультації з фахівцями','Запит на зворотній зв’язок']
 ];
-
-$reply_markup = $telegram->replyKeyboardMarkup([
-    'keyboard' => $keyboard,
-    'resize_keyboard' => true,
-    'one_time_keyboard' => true
-]);
-
-$response = $telegram->sendMessage([
-    'chat_id' => $chat_id,
-    'text' => 'Buttons',
-    'reply_markup' => $reply_markup
-]);
 $telegram->addCommands([
     Telegram\Bot\Commands\HelpCommand::class,
 
@@ -50,13 +39,18 @@ $update = $telegram->commandsHandler(true);
 if($update->getMessage()->has('text'))
 {   $text = $update->getMessage()->getText();
     switch ($text){
-        case 'New':
+        case 'Старт':
             $message = "Вітаю";
-            $keyboard = [
-                ['Ліво', 'Право', 'Центер'],
-                ['Назад']
+            $keyboard = $base_keyboard;
+            break;
+        case 'Пільгові питання':
+            $message = "Пільгові питання?";
+            $keyboard = $base_keyboard;
 
-            ];
+            break;
+        default:
+            $message = "Хибна команда";
+            $keyboard = $base_keyboard;
             break;
     }
     $reply_markup = $telegram->replyKeyboardMarkup([
@@ -64,6 +58,12 @@ if($update->getMessage()->has('text'))
         'resize_keyboard' => true,
         'one_time_keyboard' => true
     ]);
+    $response = $telegram->sendMessage([
+        'chat_id' => $chat_id,
+        'text' => $message,
+        'reply_markup' => $reply_markup
+    ]);
+
 }
 
 function env(string $variable){

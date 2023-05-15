@@ -18,8 +18,25 @@ class StartCommand extends Command
     {
         $text = '';
         $username = $this->telegram->getWebhookUpdates()->getMessage()->getFrom()->getUsername();
-        $text .= sprintf('Hello %s', $username);
+        $text .= sprintf('Вітаю %s', $username);
 
-        $this->replyWithMessage(compact('text'));
+        $keyboard = [
+            ['Правові консультації', 'Пільгові питання', 'Реабілітація'],
+            ['Соціальні обласні програми','Консультації з фахівцями','Запит на зворотній зв’язок']
+
+        ];
+
+$reply_markup = $this->telegram->replyKeyboardMarkup([
+    'keyboard' => $keyboard,
+    'resize_keyboard' => true,
+    'one_time_keyboard' => true
+]);
+
+ $this->telegram->sendMessage([
+    'chat_id' => $this->update->getMessage()->getChat()->getId(),
+    'text' => $text,
+    'reply_markup' => $reply_markup
+]);
+
     }
 }
